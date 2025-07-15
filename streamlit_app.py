@@ -227,11 +227,19 @@ def main():
         
         # OpenAI API Key input
         st.subheader("🔑 OpenAI API Key")
-        api_key = st.text_input(
-            "Enter your OpenAI API Key:",
-            type="password",
-            help="Your OpenAI API key for generating embeddings"
-        )
+        
+        # Try to get API key from secrets first
+        api_key = None
+        try:
+            api_key = st.secrets["OPENAI_API_KEY"]
+            st.success("✅ Using API key from Streamlit secrets")
+        except:
+            # Fall back to manual input if no secret is set
+            api_key = st.text_input(
+                "Enter your OpenAI API Key:",
+                type="password",
+                help="Your OpenAI API key for generating embeddings"
+            )
         
         if api_key:
             try:
